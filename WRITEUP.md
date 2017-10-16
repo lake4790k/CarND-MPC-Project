@@ -3,31 +3,33 @@
 
 The state is defined as:
 
-`double x = state[0]; // position x
+```
+double x = state[0]; // position x
 double y = state[1]; // position y
 double psi = state[2]; // orientation
 double v = state[3]; // speed
 double cte = state[4]; // cross track error
-double epsi = state[5]; // orientation error`
+double epsi = state[5]; // orientation error
+```
 
 The actuators are the steering angle and throttle level:
 
-`
+```
 auto vars = mpc.Solve(state, coeffs);
 steer_value = vars[0];
 throttle_value = vars[1];
-`
+```
 
 The updates:
 
-`
+```
 x1 = x0 + v0*cos(psi0)*dt
 y1 = y0 + v0*sin(psi0)*dt
 psi1 = psi0 + v0/Lf * delta* dt
 v1 = v0 + a0*dt
 cte1 = f0 - y0 + v0 * sin(eps0)*dt
 eps1 = psi0 - psides + v0 / Lf * delta * dt
-`
+```
 
 
 ### N and dt
