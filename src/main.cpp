@@ -6,6 +6,9 @@
 #include "MPC.h"
 #include "json.hpp"
 
+double latency = 0.1;
+double Lf = 2.67;
+
 // for convenience
 using json = nlohmann::json;
 
@@ -119,9 +122,16 @@ int main() {
                     double cte = polyeval(coeffs, 0);  // px = 0, py = 0
                     double epsi = -atan(coeffs[1]);  // p
 
+                    double pred_x = 0 + v * cos(0) * latency;
+                    double pred_y = 0 + v * sin(0) * latency;
+                    double pred_psi = 0 + v / Lf * steer_value * deg2rad(25) * latency;
+                    double pred_v = v + throttle_value * latency;
+                    double pred_cte = polyeval(coeffs, pred_x) - pred_y;
+                    double pred_epsi = -atan(coeffs[1]) + v / Lf * steer_value * deg2rad(25) * latency;
 
                     Eigen::VectorXd state(6);
                     state << 0, 0, 0, v, cte, epsi;
+                    state << pred_x, pred_y, pred_psi, pred_v, pred_cte, pred_epsi;
                     auto vars = mpc.Solve(state, coeffs);
                     steer_value = vars[0];
                     throttle_value = vars[1];

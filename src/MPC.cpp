@@ -7,8 +7,8 @@
 using CppAD::AD;
 
 // TODO: Set the timestep length and duration
-size_t N = 10;
-double dt = 0.1;
+size_t N = 10; // 30
+double dt = 0.1; // 0.05 0.3
 
 // This value assumes the model presented in the classroom is used.
 //
@@ -50,18 +50,18 @@ public:
       // TODO: Define the cost related the reference state and
       // any anything you think may be beneficial.
       for (int i = 0; i < N; i++) {
-        fg[0] += 1 * CppAD::pow(vars[cte_start + i], 2);
-        fg[0] += 1 * CppAD::pow(vars[epsi_start + i], 2);
-        fg[0] += 1 * CppAD::pow(vars[v_start + i] - ref_v, 2);
+        fg[0] += 5 * CppAD::pow(vars[cte_start + i], 2);
+        fg[0] += 5 * CppAD::pow(vars[epsi_start + i], 2);
+        fg[0] += 5 * CppAD::pow(vars[v_start + i] - ref_v, 2);
       }
 
       for (int i = 0; i < N - 1; i++) {
-        fg[0] += 1 * CppAD::pow(vars[delta_start + i], 2);
-        fg[0] += 1 * CppAD::pow(vars[a_start + i], 2);
+        fg[0] += 100 * CppAD::pow(vars[delta_start + i], 2);
+        fg[0] += 500 * CppAD::pow(vars[a_start + i], 2);
       }
       for (int t = 0; t < N - 2; t++) {
-        fg[0] += 300 * CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
-        fg[0] += 1 * CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
+        fg[0] += 500 * CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
+        fg[0] += 10 * CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
       }
 
       //
